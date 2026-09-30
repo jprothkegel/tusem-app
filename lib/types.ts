@@ -1,3 +1,5 @@
+import type { calendar_v3 } from "googleapis";
+
 export interface ApiEvent {
   id: string;
   title: string;
@@ -36,20 +38,11 @@ export interface MyTTResponse {
   [date: string]: MyTTResponseItem[];
 }
 
-interface GCalDate {
-  dateTime: string;
-  timeZone: string;
-}
-
-export interface GCalReponseItem {
-  location: string;
-  summary: string;
-  description: string;
+type GCalResponseItem = calendar_v3.Schema$Event & {
   leagueId: string;
-  start: GCalDate;
-  end: GCalDate;
-}
+  calendarId: string;
+};
 
-export interface GCalReponse {
-  events: GCalReponseItem[];
+export interface GCalResponse {
+  events: GCalResponseItem[];
 }

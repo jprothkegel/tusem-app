@@ -1,8 +1,7 @@
-import { DiffRow } from "./DiffRow";
 import type { FieldValue } from "@/lib/compare-events";
 import { DiffSection } from "./DiffSection";
 
-type Variant = "adults" | "women" | "youngs" | "plain";
+type Variant = "adults" | "women" | "youngs" | "young_women" | "plain";
 
 interface DiffCardProps {
   title: string;
@@ -26,6 +25,10 @@ const variantConfig: Record<Variant, { container: string; header: string }> = {
   youngs: {
     container: "border-teal-200 bg-teal-50/30",
     header: "border-teal-200",
+  },
+  young_women: {
+    container: "border-violet-200 bg-violet-50/30",
+    header: "border-violet-200",
   },
   plain: { container: "border-gray-200 bg-white", header: "border-gray-200" },
 };

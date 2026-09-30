@@ -42,8 +42,6 @@ export function formatDate(
     hourCycle: "h23",
   }).formatToParts(d);
 
-  console.log("Transformation", { input, parts });
-
   const get = (type: Intl.DateTimeFormatPartTypes) =>
     parts.find((p) => p.type === type)!.value;
 

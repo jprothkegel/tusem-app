@@ -14,11 +14,11 @@ import { ComparisonResult } from "@/lib/compare-events";
 import { Spinner } from "../components/Spinner/Spinner";
 
 const CATEGORIES = [
-  { id: "adults", label: "Adults", calendarId: ADULTS_CALENDAR_ID },
-  { id: "women", label: "Women", calendarId: WOMEN_CALENDAR_ID },
-  { id: "youngs", label: "Youngs", calendarId: YOUTH_CALENDAR_ID },
+  { id: "adults" as const, label: "Adults", calendarId: ADULTS_CALENDAR_ID },
+  { id: "women" as const, label: "Women", calendarId: WOMEN_CALENDAR_ID },
+  { id: "youngs" as const, label: "Youngs", calendarId: YOUTH_CALENDAR_ID },
   {
-    id: "young_women",
+    id: "young_women" as const,
     label: "Young Women",
     calendarId: YOUTH_WOMEN_CALENDAR_ID,
   },
@@ -106,10 +106,13 @@ export const DiffCalView = () => {
                   ?.label
               }
               title={
-                typeof match.fields.homeTeam === "string" &&
-                typeof match.fields.awayTeam === "string"
-                  ? `${match.fields.homeTeam} vs. ${match.fields.awayTeam}`
-                  : `${match.fields.homeTeam.to} vs. ${match.fields.awayTeam.to}`
+                typeof match.fields.homeTeam === "string"
+                  ? typeof match.fields.awayTeam === "string"
+                    ? `${match.fields.homeTeam} vs. ${match.fields.awayTeam}`
+                    : `${match.fields.homeTeam} vs. ${match.fields.awayTeam.to}`
+                  : typeof match.fields.awayTeam === "string"
+                    ? `${match.fields.homeTeam.to} vs. ${match.fields.awayTeam}`
+                    : `${match.fields.homeTeam.to} vs. ${match.fields.awayTeam.to}`
               }
               date={match.fields.date}
               hall={match.fields.hall}

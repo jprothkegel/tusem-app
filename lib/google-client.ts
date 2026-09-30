@@ -33,13 +33,8 @@ export const getEventsForCalendars = async (requestData: RequestData[]) => {
       });
 
       return (res.data.items ?? []).map((item) => ({
-        id: item.id,
         calendarId: data.calendarId,
         leagueId: data.leagueId,
-        summary: item.summary,
-        description: item.description,
-        start: item.start?.dateTime ?? item.start?.date ?? null,
-        end: item.end?.dateTime ?? item.end?.date ?? null,
         ...item,
       }));
     }),

@@ -1,5 +1,5 @@
 const DashboardPage = () => {
-  return <div>My Page</div>;
+  return <div>This is the introductory page to Tusem App</div>;
 };
 
 export default DashboardPage;

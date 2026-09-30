@@ -1,6 +1,6 @@
 import { DiffRow } from "./DiffRow";
 
-type Variant = "adults" | "women" | "youngs" | "plain";
+type Variant = "adults" | "women" | "youngs" | "young_women" | "plain";
 
 interface Props {
   title: string;
@@ -16,6 +16,7 @@ const variantStyles: Record<Variant, string> = {
   adults: "border-yellow-200",
   women: "border-pink-200",
   youngs: "border-teal-200",
+  young_women: "border-violet-200",
   plain: "border-gray-200",
 };
 

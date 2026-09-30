@@ -3,7 +3,7 @@ import { createHash } from "crypto";
 
 import type {
   ApiEvent,
-  GCalReponse,
+  GCalResponse,
   LocationMyTT,
   MyTTResponse,
 } from "./types";
@@ -85,10 +85,10 @@ const getRoundFromDescription = (description: string) => {
   return description.trim().toLocaleLowerCase();
 };
 
-export const normalizeGCal = (raw: GCalReponse): ApiEvent[] => {
+export const normalizeGCal = (raw: GCalResponse): ApiEvent[] => {
   return raw.events.map((item) => {
-    const { homeTeam, awayTeam } = getTeamsFromSumary(item.summary);
-    const round = getRoundFromDescription(item.description);
+    const { homeTeam, awayTeam } = getTeamsFromSumary(item?.summary as string);
+    const round = getRoundFromDescription(item?.description as string);
     const league = item.leagueId;
     return {
       id: createId({
@@ -99,8 +99,8 @@ export const normalizeGCal = (raw: GCalReponse): ApiEvent[] => {
       }),
       title: createTitle({ team1: homeTeam, team2: awayTeam }),
       league,
-      date: formatDate(item.start.dateTime),
-      hall: item.location,
+      date: formatDate(item?.start?.dateTime as string),
+      hall: item?.location as string,
       homeTeam,
       awayTeam,
     };
