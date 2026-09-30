@@ -4,6 +4,7 @@ import { ApiEvent } from "./types";
 
 const makeEvent = (overrides: Partial<ApiEvent> = {}): ApiEvent => ({
   id: "hash-adults-round1-teamx-teamy",
+  title: "Test title",
   league: "Adults",
   date: "2026-09-21",
   hall: "Hall A",
