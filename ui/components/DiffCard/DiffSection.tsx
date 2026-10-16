@@ -1,6 +1,6 @@
 import { DiffRow } from "./DiffRow";
 
-type Variant = "adults" | "women" | "youngs" | "young_women" | "plain";
+type Variant = "adults" | "women" | "youngs" | "young_women" | "no_league";
 
 interface Props {
   title: string;
@@ -17,14 +17,14 @@ const variantStyles: Record<Variant, string> = {
   women: "border-pink-200",
   youngs: "border-teal-200",
   young_women: "border-violet-200",
-  plain: "border-gray-200",
+  no_league: "border-gray-200",
 };
 
 export const DiffSection = ({
   title,
   content,
   modifiedContent,
-  variant = "plain",
+  variant = "no_league",
 }: Props) => {
   return (
     <div

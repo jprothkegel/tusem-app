@@ -4,11 +4,16 @@ import { useSidebar } from "./SidebarContext";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
+import { usePathname } from "next/navigation";
 
-const links = [{ href: "/cal-diff", label: "CalDiff", icon: faCalendarDays }];
+const links = [
+  { href: "/calendar-diff", label: "Calendar Diff", icon: faCalendarDays },
+];
 
 export const Sidebar = () => {
   const { isOpen, close } = useSidebar();
+  const pathname = usePathname();
+
   return (
     <>
       {isOpen && (
@@ -26,15 +31,26 @@ export const Sidebar = () => {
       md:translate-x-0
       `}
       >
-        <nav className="p-4 text-gray-800">
-          <ul>
-            {links.map((link) => (
-              <li key={link.href} className="flex items-center gap-2">
+        <nav className="text-gray-800 flex flex-col">
+          {links.map((link) => {
+            const isActive =
+              pathname === link.href || pathname.startsWith(`${link.href}/`);
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={close}
+                aria-current={isActive ? "page" : undefined}
+                className={`flex items-center gap-2 border-l-4 border-transparent p-4 hover:bg-gray-200 focus-visible:bg-gray-200 ${
+                  isActive ? "border-gray-800 bg-gray-100 font-semibold" : ""
+                }`}
+              >
                 <FontAwesomeIcon icon={link.icon} />
-                <Link href={link.href}>{link.label}</Link>
-              </li>
-            ))}
-          </ul>
+                <span>{link.label}</span>
+              </Link>
+            );
+          })}
         </nav>
       </aside>
     </>

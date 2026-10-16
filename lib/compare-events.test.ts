@@ -5,7 +5,7 @@ import { ApiEvent } from "./types";
 const makeEvent = (overrides: Partial<ApiEvent> = {}): ApiEvent => ({
   id: "hash-adults-round1-teamx-teamy",
   title: "Test title",
-  league: "Adults",
+  league: "adults",
   date: "2026-09-21",
   hall: "Hall A",
   homeTeam: "Team X",
@@ -31,7 +31,7 @@ describe("calculateDiff", () => {
     expect(calculateDiff(a, b)).toEqual([
       {
         id: "hash-adults-round1-teamx-teamy",
-        league: "Adults",
+        league: "adults",
         fields: {
           date: "2026-09-21",
           hall: { from: "Hall A", to: "Hall B" },
@@ -49,7 +49,7 @@ describe("calculateDiff", () => {
     expect(calculateDiff(a, b)).toEqual([
       {
         id: "hash-adults-round1-teamx-teamy",
-        league: "Adults",
+        league: "adults",
         fields: {
           date: { from: "2026-09-21", to: "2026-09-22" },
           hall: { from: "Hall A", to: "Hall B" },
@@ -67,7 +67,7 @@ describe("calculateDiff", () => {
     expect(calculateDiff(a, b)).toEqual([
       {
         id: "hash-adults-round1-teamx-teamy",
-        league: "Adults",
+        league: "adults",
         fields: {
           date: "2026-09-21",
           hall: "Hall A",
@@ -80,18 +80,18 @@ describe("calculateDiff", () => {
 
   it("matches events by id, regardless of their order in each array", () => {
     const a = [
-      makeEvent({ id: "id-1", league: "Adults", hall: "Hall A" }),
-      makeEvent({ id: "id-2", league: "Youth", homeTeam: "Team X" }),
+      makeEvent({ id: "id-1", league: "adults", hall: "Hall A" }),
+      makeEvent({ id: "id-2", league: "youngs", homeTeam: "Team X" }),
     ];
     const b = [
-      makeEvent({ id: "id-2", league: "Youth", homeTeam: "Team Z" }), // order swapped vs a
-      makeEvent({ id: "id-1", league: "Adults", hall: "Hall A" }), // unchanged
+      makeEvent({ id: "id-2", league: "youngs", homeTeam: "Team Z" }), // order swapped vs a
+      makeEvent({ id: "id-1", league: "adults", hall: "Hall A" }), // unchanged
     ];
 
     expect(calculateDiff(a, b)).toEqual([
       {
         id: "id-2",
-        league: "Youth",
+        league: "youngs",
         fields: {
           date: "2026-09-21",
           hall: "Hall A",
@@ -132,7 +132,7 @@ describe("calculateDiff", () => {
     expect(calculateDiff(a, b)).toEqual([
       {
         id: "id-1",
-        league: "Adults",
+        league: "adults",
         fields: {
           date: "2026-09-21",
           hall: { from: "Hall A", to: "Hall B" },

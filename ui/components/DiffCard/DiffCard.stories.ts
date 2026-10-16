@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    leagueCategory: "Erwachsene",
+    leagueLabel: "Erwachsene",
     title: "Tusem vs The World",
     date: "12/10/2026",
     hall: "Test Hall",
@@ -24,7 +24,7 @@ export const Default: Story = {
 
 export const WomenCard: Story = {
   args: {
-    leagueCategory: "Erwachsene",
+    leagueLabel: "Erwachsene",
     title: "Tusem vs The World",
     date: "12/10/2026",
     hall: "Test Hall",
@@ -36,7 +36,7 @@ export const WomenCard: Story = {
 
 export const YoungCard: Story = {
   args: {
-    leagueCategory: "Erwachsene",
+    leagueLabel: "Erwachsene",
     title: "Tusem vs The World",
     date: "12/10/2026",
     hall: "Test Hall",
@@ -48,7 +48,7 @@ export const YoungCard: Story = {
 
 export const YoungWomenCard: Story = {
   args: {
-    leagueCategory: "Erwachsene",
+    leagueLabel: "Erwachsene",
     title: "Tusem vs The World",
     date: "12/10/2026",
     hall: "Test Hall",

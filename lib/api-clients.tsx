@@ -7,9 +7,10 @@ import type {
   LocationMyTT,
   MyTTResponse,
 } from "./types";
+import { LeagueId } from "./leagues";
 
 interface IdProps {
-  league: string;
+  league: LeagueId;
   round: string;
   team1: string;
   team2: string;
@@ -34,11 +35,10 @@ const getAddressFromMyTT = (location: LocationMyTT) => {
 };
 
 const getLeagueFromMyTT = (league: string) => {
-  if (league.startsWith("E")) return "adults";
-  else if (league.startsWith("D")) return "women";
-  else if (league.startsWith("J")) return "young";
+  if (league.startsWith("D")) return "women";
+  else if (league.startsWith("J")) return "youngs";
   else if (league.startsWith("M")) return "young_women";
-  else return "no_league";
+  else return "adults";
 };
 
 export const normalizeMyTT = (raw: MyTTResponse): ApiEvent[] => {

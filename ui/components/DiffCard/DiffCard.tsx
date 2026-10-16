@@ -1,11 +1,11 @@
 import type { FieldValue } from "@/lib/compare-events";
 import { DiffSection } from "./DiffSection";
 
-type Variant = "adults" | "women" | "youngs" | "young_women" | "plain";
+type Variant = "adults" | "women" | "youngs" | "young_women";
 
 interface DiffCardProps {
   title: string;
-  leagueCategory?: string;
+  leagueLabel?: string;
   variant?: Variant;
   date: FieldValue;
   hall: FieldValue;
@@ -30,13 +30,12 @@ const variantConfig: Record<Variant, { container: string; header: string }> = {
     container: "border-violet-200 bg-violet-50/30",
     header: "border-violet-200",
   },
-  plain: { container: "border-gray-200 bg-white", header: "border-gray-200" },
 };
 
 export const DiffCard = ({
   title,
-  leagueCategory,
-  variant = "plain",
+  leagueLabel = "Adults",
+  variant = "adults",
   date,
   hall,
   homeTeam,
@@ -49,8 +48,8 @@ export const DiffCard = ({
       <div
         className={`px-4 py-2 border-b flex flex-col gap-0.5 ${variantConfig[variant].header}`}
       >
-        {leagueCategory && (
-          <span className="text-xs text-gray-400">{leagueCategory}</span>
+        {leagueLabel && (
+          <span className="text-xs text-gray-400">{leagueLabel}</span>
         )}
         <span>{title}</span>
       </div>

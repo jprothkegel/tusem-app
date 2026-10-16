@@ -1,10 +1,11 @@
+import { LeagueId } from "./leagues";
 import { ApiEvent } from "./types";
 
 export type FieldValue = string | { from: string; to: string };
 
 export type ComparisonResult = {
   id: string;
-  league: string;
+  league: LeagueId;
   fields: Record<Exclude<keyof ApiEvent, "id" | "league">, FieldValue>;
 };
 

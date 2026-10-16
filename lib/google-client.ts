@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { GOOGLE_API_KEY } from "./constants.server";
+import { LeagueId } from "./leagues";
 
 const calendar = google.calendar({
   version: "v3",
@@ -19,7 +20,7 @@ export const getCalendarEvents = async (id: string) => {
 
 interface RequestData {
   calendarId: string;
-  leagueId: string;
+  leagueId: LeagueId;
 }
 
 export const getEventsForCalendars = async (requestData: RequestData[]) => {
@@ -34,7 +35,7 @@ export const getEventsForCalendars = async (requestData: RequestData[]) => {
 
       return (res.data.items ?? []).map((item) => ({
         calendarId: data.calendarId,
-        leagueId: data.leagueId,
+        leagueId: data.leagueId as LeagueId,
         ...item,
       }));
     }),

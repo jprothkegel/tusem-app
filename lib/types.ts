@@ -1,9 +1,13 @@
 import type { calendar_v3 } from "googleapis";
+import { LeagueId } from "./leagues";
+
+export type League =
+  "adults" | "women" | "youngs" | "young_women" | "no_league";
 
 export interface ApiEvent {
   id: string;
   title: string;
-  league: string;
+  league: LeagueId;
   date: string;
   hall: string;
   homeTeam: string;
@@ -39,7 +43,7 @@ export interface MyTTResponse {
 }
 
 type GCalResponseItem = calendar_v3.Schema$Event & {
-  leagueId: string;
+  leagueId: LeagueId;
   calendarId: string;
 };
 
