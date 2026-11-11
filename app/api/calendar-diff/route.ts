@@ -5,8 +5,6 @@ import { normalizeMyTT, normalizeGCal } from "@/lib/api-clients";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
-export const preferredRegion = "fra1";
-
 type UpstreamDetails = {
   url: string;
   status?: number;
