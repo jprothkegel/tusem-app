@@ -1,7 +1,14 @@
 import { useState, useCallback } from "react";
+import * as Sentry from "@sentry/nextjs";
 import type { ComparisonResult } from "@/lib/compare-events";
 import { LEAGUE_BY_ID, type LeagueId } from "@/lib/leagues";
-import * as Sentry from "@sentry/nextjs";
+
+const MESSAGES = {
+  upstream:
+    "A data source is currently unavailable. Try again in a few minutes.",
+  generic: "Was not possible to calculate the difference. Try again.",
+  network: "Could not reach the server. Check your connection and try again.",
+} as const;
 
 export const useCalendarDiff = () => {
   const [loading, setLoading] = useState(false);
@@ -14,23 +21,42 @@ export const useCalendarDiff = () => {
     setResult(null);
 
     try {
-      const response = await fetch("/api/calendar-diff", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          selectedLeagueIds: categoryIds.map((id) => ({
-            calendarId: LEAGUE_BY_ID.get(id)?.calendarId,
-            leagueId: id,
-          })),
-        }),
-      });
+      let response: Response;
+      try {
+        response = await fetch("/api/calendar-diff", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            selectedLeagueIds: categoryIds.map((id) => ({
+              calendarId: LEAGUE_BY_ID.get(id)?.calendarId,
+              leagueId: id,
+            })),
+          }),
+        });
+      } catch (e) {
+        Sentry.captureException(e, {
+          level: "warning",
+          tags: { feature: "calendar-diff", failure_source: "client-network" },
+        });
+        setError(MESSAGES.network);
+        return;
+      }
 
-      if (!response.ok) throw new Error("Failed to calculate calendar diff");
+      if (!response.ok) {
+        setError(
+          response.status === 502 ? MESSAGES.upstream : MESSAGES.generic,
+        );
+        return;
+      }
 
-      setResult(await response.json());
-    } catch (e) {
-      Sentry.captureException(e);
-      setError("Was not possible to calculate the difference. Try again");
+      try {
+        setResult(await response.json());
+      } catch (e) {
+        Sentry.captureException(e, {
+          tags: { feature: "calendar-diff", failure_source: "client-parse" },
+        });
+        setError(MESSAGES.generic);
+      }
     } finally {
       setLoading(false);
     }
