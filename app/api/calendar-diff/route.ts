@@ -5,10 +5,20 @@ import { normalizeMyTT, normalizeGCal } from "@/lib/api-clients";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
+type UpstreamDetails = {
+  url: string;
+  status?: number;
+  statusText?: string;
+  headers?: Record<string, string>;
+  bodyPreview?: string;
+  durationMs?: number;
+};
+
 class UpstreamError extends Error {
   constructor(
     public source: "mytt" | "gcal",
     message: string,
+    public details?: UpstreamDetails,
     options?: ErrorOptions,
   ) {
     super(message, options);
@@ -21,19 +31,40 @@ async function fetchMyTT() {
   try {
     res = await fetch(MYTT_GAME_PLAN);
   } catch (e) {
-    throw new UpstreamError("mytt", "MyTT request failed (network/timeout)", {
-      cause: e,
-    });
+    throw new UpstreamError(
+      "mytt",
+      "MyTT request failed (network/timeout)",
+      { url: MYTT_GAME_PLAN },
+      { cause: e },
+    );
   }
+
+  const text = await res.text();
+  const details: UpstreamDetails = {
+    url: MYTT_GAME_PLAN,
+    status: res.status,
+    statusText: res.statusText,
+    bodyPreview: text.slice(0, 500),
+  };
 
   if (!res.ok) {
     throw new UpstreamError("mytt", `MyTT responded with status ${res.status}`);
   }
 
+  if (!text.trim()) {
+    throw new UpstreamError(
+      "mytt",
+      `MyTT returned an empty body (status ${res.status})`,
+      details,
+    );
+  }
+
   try {
-    return await res.json();
+    return JSON.parse(text);
   } catch (e) {
-    throw new UpstreamError("mytt", "MyTT returned invalid JSON", { cause: e });
+    throw new UpstreamError("mytt", "MyTT returned invalid JSON", details, {
+      cause: e,
+    });
   }
 }
 
@@ -41,9 +72,14 @@ async function fetchGcal(selectedLeagueIds: any[]) {
   try {
     return await getEventsForCalendars(selectedLeagueIds);
   } catch (e) {
-    throw new UpstreamError("gcal", "Google Calendar request failed", {
-      cause: e,
-    });
+    throw new UpstreamError(
+      "gcal",
+      "Google Calendar request failed",
+      { url: "google calendar" },
+      {
+        cause: e,
+      },
+    );
   }
 }
 
@@ -68,7 +104,13 @@ export async function POST(request: Request) {
       tags: {
         feature: "calendar-diff",
         failure_source: isUpstream ? e.source : "internal",
+        vercel_region: process.env.VERCEL_REGION ?? "local",
+        upstream_status: isUpstream
+          ? String(e.details?.status ?? "none")
+          : undefined,
       },
+      contexts:
+        isUpstream && e.details ? { upstream_response: e.details } : undefined,
       extra: { selectedLeagueIds },
     });
 
