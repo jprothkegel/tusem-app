@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import type { ComparisonResult } from "@/lib/compare-events";
 import { LEAGUE_BY_ID, type LeagueId } from "@/lib/leagues";
+import * as Sentry from "@sentry/nextjs";
 
 export const useCalendarDiff = () => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export const useCalendarDiff = () => {
 
       setResult(await response.json());
     } catch (e) {
-      console.error(e);
+      Sentry.captureException(e);
       setError("Was not possible to calculate the difference. Try again");
     } finally {
       setLoading(false);
